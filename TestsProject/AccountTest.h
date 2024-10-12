@@ -2,15 +2,47 @@
 #ifndef ACCOUNT_TEST_H
 #define ACCOUNT_TEST_H
 
-void testCreateAccount();
-void testCreateAccountWithInvalidBalance();
-void testCreateAccountWithInvalidName();
+#pragma region Tests declaration
+void testCanCreateAccount();
+void testCannotCreateAccountWithInvalidName();
+void testCannotCreateAccountWithDuplicateNumber();
 
-// TODO: test update, test delete 
+void testCanUpdateAccount();
+void testCannotUpdateAccountWithInvalidName();
+void testCannotUpdateAccountWithDuplicateNumber();
 
-void testDeposit();
-void testWithdrawSufficientFunds();
-void testWithdrawInsufficientFunds();
-void testCreateAccountWithDuplicateNumber();
+void testCanRemoveAccount();
+void testCannotRemoveAccountWithInvalidId();
+
+void testCanDeposit();
+void testCanWithdraw();
+void testCannotOverdraft();
+#pragma endregion
+
+#pragma region Utils
+void accountTestWrapper(void (*const)());
+#pragma endregion
+
+inline void runAccountTestSuite()
+{
+    // Account creation tests
+    accountTestWrapper(testCanCreateAccount);
+    accountTestWrapper(testCannotCreateAccountWithInvalidName);
+    accountTestWrapper(testCannotCreateAccountWithDuplicateNumber);
+
+    // Account update tests
+    accountTestWrapper(testCanUpdateAccount);
+    accountTestWrapper(testCannotUpdateAccountWithInvalidName);
+    accountTestWrapper(testCannotUpdateAccountWithDuplicateNumber);
+
+    // Account deletion tests
+    accountTestWrapper(testCanRemoveAccount);
+    accountTestWrapper(testCannotRemoveAccountWithInvalidId);
+
+    // Account deposit/withdraw operations tests
+    accountTestWrapper(testCanDeposit);
+    accountTestWrapper(testCanWithdraw);
+    accountTestWrapper(testCannotOverdraft);
+}
 
 #endif // !ACCOUNT_TEST_H
