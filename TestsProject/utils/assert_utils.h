@@ -6,6 +6,6 @@
 
 #define assert_fail(expr)\
 try { expr; assert(false); }\
-catch (...) { assert(true); }
+catch (...) {}
 
 #endif // !ASSERT_UTILS_H
