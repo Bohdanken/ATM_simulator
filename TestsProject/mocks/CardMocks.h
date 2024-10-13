@@ -100,8 +100,34 @@ struct CardService
         return CardDTO(entity); // TODO [T2]: add support for move semantics
     }
 
+    static inline void update(const uint64_t id, const CardDTO &dto)
+    {
+        validateUpdate(id, dto);
+        CardRepository::update(id, dto);
+    }
+
+    static inline void remove(const uint64_t id)
+    {
+        const std::optional<CardEntity> &optEntity(CardRepository::getById(id));
+        if (!optEntity.has_value())
+            throw std::invalid_argument("Error: Cannot delete a card that doesn't exist");
+        CardRepository::remove(id);
+    }
+
+    static inline CardDTO getById(const uint64_t id)
+    {
+        const std::optional<CardEntity> &optEntity(CardRepository::getById(id));
+        if (!optEntity.has_value())
+            throw std::invalid_argument("Error: Cannot get a DTO of a card that does not exist");
+        return CardDTO(optEntity.value());
+    }
+
     static inline void validateCreate(const CardDTO &dto)
     {
+        const std::optional<AccountEntity> &optAccountEntity(AccountRepository::getById(dto.getAccountId()));
+        if (!optAccountEntity.has_value())
+            throw std::invalid_argument("Error: Cannot create a card for an account that doesn't exist");
+
         validatePin(dto);
         for (const CardEntity &entity : CardRepository::getAll())
         {
@@ -115,6 +141,10 @@ struct CardService
         const std::optional<CardEntity> &optEntity(CardRepository::getById(id));
         if (!optEntity.has_value())
             throw std::invalid_argument("Error: Cannot update a card that doesn't exist");
+        
+        const std::optional<AccountEntity> &optAccountEntity(AccountRepository::getById(dto.getAccountId()));
+        if (!optAccountEntity.has_value())
+            throw std::invalid_argument("Error: Cannot update a card to be for an account that doesn't exist");
 
         validatePin(dto);
         for (const CardEntity &entity : CardRepository::getAll())
