@@ -3,7 +3,6 @@
 #define ACCOUNT_TEST_H
 
 #pragma region Utils
-// TODO [T2?->Release]: Rewrite as a template or use inheritance (BaseRepository)
 void accountTestWrapper(void (*const)());
 #pragma endregion
 

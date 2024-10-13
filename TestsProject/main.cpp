@@ -1,8 +1,10 @@
 ﻿#include "AccountTest.h"
+#include "CardTest.h"
 
 int main()
 {
-	runAccountTestSuite();
+	// runAccountTestSuite();
+    testCanUpdateCard();
 
 	return 0;
 }

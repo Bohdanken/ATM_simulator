@@ -8,7 +8,7 @@ void testCannotCreateCardForInvalidAccount();
 void testCannotCreateDuplicateCardForAccount();
 void testCannotCreateCardWithInvalidPin();
 
-void testCanUpdatePin();
+void testCanUpdateCard();
 void testCannotUpdateCardBecomingForInvalidAccount();
 void testCannotUpdateCardBecomingDuplicateForAccount();
 void testCannotUpdateCardWithInvalidPin();
