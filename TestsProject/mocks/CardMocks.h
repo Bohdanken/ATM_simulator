@@ -1,5 +1,3 @@
-#include "AccountMocks.h"
-
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -61,19 +59,74 @@ struct CardRepository
         return std::nullopt;
     }
 
+    static inline std::list<CardEntity> getAll() { return cards; }
+
+    static inline void save(const CardEntity &entity) { cards.push_back(entity); }
+
+    static inline void update(const uint64_t id, const CardDTO &dto)
+    {
+        for (CardEntity &entity : cards)
+        {
+            if (entity.getId() == id)
+            {
+                entity.setAccountId(dto.getAccountId());
+                entity.setPin(dto.getPin());
+                break;
+            }
+        }
+    }
+
+    static inline void remove(const uint64_t id)
+    {
+        cards.remove_if(
+            [id](const CardEntity &entity) -> bool { return entity.getId() == id; }
+        );
+    }
+
+    // TODO: remove after db setup
     static inline std::list<CardEntity> cards;
 };
 
-static inline void test()
+struct CardService
 {
-    AccountDTO sourceDTO;
-    sourceDTO.setNumber(532);
-    sourceDTO.setBalance(2000);
-    sourceDTO.setUserName("Oleksiy");
+    static inline CardDTO create(const CardDTO &dto)
+    {
+        validateCreate(dto);
+        CardEntity entity;
+        entity._id = entity.freeId++; // will be handled by the database
+        entity.setAccountId(dto.getAccountId());
+        entity.setPin(dto.getPin());
+        CardRepository::save(entity);
+        return CardDTO(entity); // TODO [T2]: add support for move semantics
+    }
 
-    const AccountDTO &resultDTO(AccountService::create(sourceDTO));
+    static inline void validateCreate(const CardDTO &dto)
+    {
+        validatePin(dto);
+        for (const CardEntity &entity : CardRepository::getAll())
+        {
+            if (entity.getAccountId() == dto.getAccountId())
+                throw std::invalid_argument("Error: Trying to create a duplicate card for an account");
+        }
+    }
 
-    CardDTO card;
-    card.setAccountId(resultDTO.getId());
-    card.setPin(1234);
-}
+    static inline void validateUpdate(const uint64_t id, const CardDTO &dto)
+    {
+        const std::optional<CardEntity> &optEntity(CardRepository::getById(id));
+        if (!optEntity.has_value())
+            throw std::invalid_argument("Error: Cannot update a card that doesn't exist");
+
+        validatePin(dto);
+        for (const CardEntity &entity : CardRepository::getAll())
+        {
+            if (entity.getAccountId() == dto.getAccountId() && entity.getId() != id)
+                throw std::invalid_argument("Error: Cannot update card to become duplicate for an account");
+        }
+    }
+
+    static inline void validatePin(const CardDTO &dto)
+    {
+        if (dto.getPin() > 9999)
+            throw std::invalid_argument("Error: Card pin must be in range from 0000 to 9999");
+    }
+};
