@@ -6,7 +6,7 @@
 
 struct AccountEntity
 {
-    AccountEntity() : _id(0), _number(0), _balance(0) {};
+    AccountEntity() : _id(0), _number(0), _balance(0) {}
 
     static inline uint64_t freeId = 0; // TODO [T2]: remove after db setup
     /*const*/ uint64_t _id; // TODO [T2]: will be const after db setup
@@ -26,7 +26,7 @@ struct AccountEntity
 
 struct AccountDTO
 {
-    AccountDTO() : _id(0), _number(0), _balance(0) {};
+    AccountDTO() : _id(0), _number(0), _balance(0) {}
 
     AccountDTO(const AccountEntity &entity) :
         _id(entity.getId()), 

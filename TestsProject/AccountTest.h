@@ -16,7 +16,7 @@ void testCanUpdateAccount();
 void testCannotUpdateAccountWithInvalidName();
 void testCannotUpdateAccountWithDuplicateNumber();
 
-// TODO [T2]: Service implementation must ensure no card depends on this account
+// TODO [T2]: Final service implementation must ensure no card depends on this account
 void testCanRemoveAccount();
 void testCannotRemoveAccountWithInvalidId();
 
