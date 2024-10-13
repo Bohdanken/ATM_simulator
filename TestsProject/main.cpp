@@ -3,8 +3,8 @@
 
 int main()
 {
-	// runAccountTestSuite();
-    testCanUpdateCard();
+	runAccountTestSuite();
+	runCardTestSuite();
 
 	return 0;
 }
