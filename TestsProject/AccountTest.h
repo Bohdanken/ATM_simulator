@@ -11,6 +11,7 @@ void testCanUpdateAccount();
 void testCannotUpdateAccountWithInvalidName();
 void testCannotUpdateAccountWithDuplicateNumber();
 
+// TODO [Release]: Servive implementation must ensure no card depends on this account
 void testCanRemoveAccount();
 void testCannotRemoveAccountWithInvalidId();
 
@@ -20,6 +21,7 @@ void testCannotOverdraft();
 #pragma endregion
 
 #pragma region Utils
+// TODO [Release]: Rewrite as a template or use inheritance (BaseRepository)
 void accountTestWrapper(void (*const)());
 #pragma endregion
 

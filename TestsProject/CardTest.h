@@ -2,13 +2,24 @@
 #ifndef CARD_TEST_H
 #define CARD_TEST_H
 
-void testUpdatePin();
-void testVerifyPinCorrect();
-void testVerifyPinIncorrect();
-void testAccountLockAfterFailures();
+#pragma region Tests declaration
+void testCanCreateCard();
+void testCannotCreateCardForInvalidAccount();
+void testCannotCreateDuplicateCardForAccount();
+void testCannotCreateCardWithInvalidPin();
+
+void testCanUpdatePin();
+void testCannotUpdateCardBecomingForInvalidAccount();
+void testCannotUpdateCardBecomingDuplicateForAccount();
+void testCannotUpdateCardWithInvalidPin();
+
+void testCanRemoveCard();
+void testCannotRemoveCardWithInvalidId();
+#pragma endregion
 
 // TODO: transfer to ATM:
 // void testCardReaderValid();
 // void testCardReaderInvalid();
+// void testAccountLockAfterFailures();
 
 #endif // !CARD_TEST_H
