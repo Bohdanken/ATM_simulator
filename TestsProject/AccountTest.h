@@ -2,6 +2,11 @@
 #ifndef ACCOUNT_TEST_H
 #define ACCOUNT_TEST_H
 
+#pragma region Utils
+// TODO [T2?->Release]: Rewrite as a template or use inheritance (BaseRepository)
+void accountTestWrapper(void (*const)());
+#pragma endregion
+
 #pragma region Tests declaration
 void testCanCreateAccount();
 void testCannotCreateAccountWithInvalidName();
@@ -11,18 +16,13 @@ void testCanUpdateAccount();
 void testCannotUpdateAccountWithInvalidName();
 void testCannotUpdateAccountWithDuplicateNumber();
 
-// TODO [Release]: Servive implementation must ensure no card depends on this account
+// TODO [T2]: Service implementation must ensure no card depends on this account
 void testCanRemoveAccount();
 void testCannotRemoveAccountWithInvalidId();
 
 void testCanDeposit();
 void testCanWithdraw();
 void testCannotOverdraft();
-#pragma endregion
-
-#pragma region Utils
-// TODO [Release]: Rewrite as a template or use inheritance (BaseRepository)
-void accountTestWrapper(void (*const)());
 #pragma endregion
 
 inline void runAccountTestSuite()
