@@ -11,8 +11,27 @@ endif()
 
 project ("TestsProject")
 
-# Add source to this project's executable.
-add_executable (TestsProject "main.cpp" "AccountTest.h" "AccountTest.cpp" "CardTest.h" "CardTest.cpp" "utils/assert_utils.h" "mocks/AccountMocks.h" "mocks/CardMocks.h" "TransferTest.h" "TransferTest.cpp" "mocks/TransferMocks.h" "utils/time_utils.h")
+# Set Boost root directory explicitly (Adjust according to your system)
+set(BOOST_ROOT "C:/local/boost_1_86_0")
+set(Boost_INCLUDE_DIR "C:/local/boost_1_86_0")
+set(Boost_LIBRARY_DIR "C:/local/boost_1_86_0/lib64-msvc-14.3")
+
+# Find Boost (Make sure it finds system and thread components)
+find_package(Boost REQUIRED COMPONENTS system thread)
+
+# If Boost is found, include its directories and link libraries
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+
+    # Add source to this project's executable.
+    add_executable (TestsProject "main.cpp" "AccountTest.h" "AccountTest.cpp" "CardTest.h" "CardTest.cpp" "utils/assert_utils.h" "mocks/AccountMocks.h" "mocks/CardMocks.h" "TransferTest.h" "TransferTest.cpp" "mocks/TransferMocks.h" "utils/time_utils.h" "mocks/TransferDaemonMocks.h" "TransferDaemonTest.h")
+
+    # Link Boost libraries
+    target_link_libraries(TestsProject ${Boost_LIBRARIES})
+
+else()
+    message(FATAL_ERROR "Boost not found, please check your installation")
+endif()
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET TestsProject PROPERTY CXX_STANDARD 20)
