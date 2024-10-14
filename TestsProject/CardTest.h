@@ -40,9 +40,4 @@ inline void runCardTestSuite()
     cardTestWrapper(testCannotRemoveCardWithInvalidId);
 }
 
-// TODO: transfer to ATM:
-// void testCardReaderValid();
-// void testCardReaderInvalid();
-// void testAccountLockAfterFailures();
-
 #endif // !CARD_TEST_H
