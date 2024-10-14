@@ -1,5 +1,6 @@
 ﻿#include "AccountTest.h"
 #include "CardTest.h"
+#include "mocks/TransferMocks.h"
 
 int main()
 {

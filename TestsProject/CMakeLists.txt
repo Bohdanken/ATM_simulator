@@ -12,7 +12,7 @@ endif()
 project ("TestsProject")
 
 # Add source to this project's executable.
-add_executable (TestsProject "main.cpp" "AccountTest.h" "AccountTest.cpp" "CardTest.h" "CardTest.cpp" "utils/assert_utils.h" "mocks/AccountMocks.h" "mocks/CardMocks.h" "TransferTest.h" "TransferTest.cpp" "mocks/TransferMocks.h")
+add_executable (TestsProject "main.cpp" "AccountTest.h" "AccountTest.cpp" "CardTest.h" "CardTest.cpp" "utils/assert_utils.h" "mocks/AccountMocks.h" "mocks/CardMocks.h" "TransferTest.h" "TransferTest.cpp" "mocks/TransferMocks.h" "utils/time_utils.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET TestsProject PROPERTY CXX_STANDARD 20)
