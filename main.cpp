@@ -2,7 +2,8 @@
 
 int main()
 {
-	runAccountTestSuite();
 
+	runAccountTestSuite();
 	return 0;
+
 }

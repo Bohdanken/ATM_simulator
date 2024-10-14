@@ -17,6 +17,8 @@ void testCannotRemoveAccountWithInvalidId();
 void testCanDeposit();
 void testCanWithdraw();
 void testCannotOverdraft();
+
+void deamonTestWorks();
 #pragma endregion
 
 #pragma region Utils
@@ -43,6 +45,8 @@ inline void runAccountTestSuite()
     accountTestWrapper(testCanDeposit);
     accountTestWrapper(testCanWithdraw);
     accountTestWrapper(testCannotOverdraft);
+
+    deamonTestWorks();
 }
 
 #endif // !ACCOUNT_TEST_H
