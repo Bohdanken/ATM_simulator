@@ -16,7 +16,7 @@ struct DateTime
     uint16_t minute;
     uint16_t second;
 
-    static inline DateTime getCurrentDateTime()
+    static inline DateTime getCurrent()
     {
         const std::time_t now = std::time(nullptr);
         const std::tm *const local_time = localtime(&now);
@@ -45,6 +45,16 @@ inline bool operator<(const DateTime &dt1, const DateTime &dt2)
 inline bool operator>(const DateTime &dt1, const DateTime &dt2)
 {
     return dt2 < dt1;
+}
+
+inline bool operator==(const DateTime &dt1, const DateTime &dt2)
+{
+    return !(dt1 < dt2) && !(dt1 > dt2);
+}
+
+inline bool operator!=(const DateTime &dt1, const DateTime &dt2)
+{
+    return !(dt1 == dt2);
 }
 
 #endif // !TIME_UTILS_H

@@ -17,7 +17,7 @@ struct TransferEntity
         _fromAccountId(0), 
         _toAccountId(0), 
         _amount(0), 
-        _datetime(DateTime::getCurrentDateTime()) 
+        _datetime(DateTime::getCurrent()) 
     {
     }
 
@@ -47,7 +47,7 @@ struct TransferDTO
         _fromAccountId(0),
         _toAccountId(0),
         _amount(0),
-        _datetime(DateTime::getCurrentDateTime())
+        _datetime(DateTime::getCurrent())
     {
     }
 
@@ -201,7 +201,7 @@ struct TransferService
 
     static inline void validateDatetime(const TransferDTO &dto)
     {
-        const DateTime &currentTime(DateTime::getCurrentDateTime());
+        const DateTime &currentTime(DateTime::getCurrent());
         DateTime cutoffPastTime(currentTime);
         cutoffPastTime.year -= 100;
         if (dto.getDateTime() > currentTime || dto.getDateTime() < cutoffPastTime)
