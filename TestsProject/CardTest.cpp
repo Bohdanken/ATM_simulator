@@ -78,7 +78,7 @@ void testCannotCreateCardWithInvalidPin()
     // Create a card for the account
     CardDTO cardSource;
     cardSource.setAccountId(accountResult.getId());
-    cardSource.setPin(83483);
+    cardSource.setPin(34838);
     assert_fail(CardService::create(cardSource));
 }
 
