@@ -32,4 +32,19 @@ struct DateTime
     }
 };
 
+inline bool operator<(const DateTime &dt1, const DateTime &dt2)
+{
+    if (dt1.year != dt2.year) return dt1.year < dt2.year;
+    if (dt1.month != dt2.month) return dt1.month < dt2.month;
+    if (dt1.day != dt2.day) return dt1.day < dt2.day;
+    if (dt1.hour != dt2.hour) return dt1.hour < dt2.hour;
+    if (dt1.minute != dt2.minute) return dt1.minute < dt2.minute;
+    return dt1.second < dt2.second;
+}
+
+inline bool operator>(const DateTime &dt1, const DateTime &dt2)
+{
+    return dt2 < dt1;
+}
+
 #endif // !TIME_UTILS_H

@@ -171,6 +171,7 @@ struct TransferService
         if (!optToAccountEntity.has_value())
             throw std::invalid_argument("Error: Cannot create a transfer to an account that doesn't exist");
 
+        validateAccountsAreDifferent(dto);
         validateDatetime(dto);
     }
 
@@ -188,13 +189,23 @@ struct TransferService
         if (!optToAccountEntity.has_value())
             throw std::invalid_argument("Error: Cannot update a transfer to be to an account that doesn't exist");
 
+        validateAccountsAreDifferent(dto);
         validateDatetime(dto);
+    }
+
+    static inline void validateAccountsAreDifferent(const TransferDTO &dto)
+    {
+        if (dto.getFromAccountId() == dto.getToAccountId())
+            throw std::invalid_argument("Error: Account to transfer funds from cannot be the account to transfer funds to");
     }
 
     static inline void validateDatetime(const TransferDTO &dto)
     {
-        if (dto.getDateTime().year > DateTime::getCurrentDateTime().year)
-            throw std::invalid_argument("Error: Transfer date and time ");
+        const DateTime &currentTime(DateTime::getCurrentDateTime());
+        DateTime cutoffPastTime(currentTime);
+        cutoffPastTime.year -= 100;
+        if (dto.getDateTime() > currentTime || dto.getDateTime() < cutoffPastTime)
+            throw std::invalid_argument("Error: Invalid trasfer datetime");
     }
 };
 
