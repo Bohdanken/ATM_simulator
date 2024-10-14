@@ -1,3 +1,7 @@
+#pragma once
+#ifndef CARD_MOCKS_H
+#define CARD_MOCKS_H
+
 #include <list>
 #include <optional>
 #include <stdexcept>
@@ -25,7 +29,7 @@ struct CardDTO
     CardDTO() : _id(0), _accountId(0), _pin(0) {}
 
     CardDTO(const CardEntity &entity) :
-        _id(entity.getId()), 
+        _id(entity.getId()),
         _accountId(entity.getAccountId()),
         _pin(entity.getPin())
     {
@@ -141,7 +145,7 @@ struct CardService
         const std::optional<CardEntity> &optEntity(CardRepository::getById(id));
         if (!optEntity.has_value())
             throw std::invalid_argument("Error: Cannot update a card that doesn't exist");
-        
+
         const std::optional<AccountEntity> &optAccountEntity(AccountRepository::getById(dto.getAccountId()));
         if (!optAccountEntity.has_value())
             throw std::invalid_argument("Error: Cannot update a card to be for an account that doesn't exist");
@@ -160,3 +164,5 @@ struct CardService
             throw std::invalid_argument("Error: Card pin must be in range from 0000 to 9999");
     }
 };
+
+#endif // !CARD_MOCKS_H

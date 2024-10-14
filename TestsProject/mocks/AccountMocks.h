@@ -1,3 +1,7 @@
+#pragma once
+#ifndef ACCOUNT_MOCKS_H
+#define ACCOUNT_MOCKS_H
+
 #include <string>
 #include <list>
 #include <optional>
@@ -29,10 +33,10 @@ struct AccountDTO
     AccountDTO() : _id(0), _number(0), _balance(0) {}
 
     AccountDTO(const AccountEntity &entity) :
-        _id(entity.getId()), 
+        _id(entity.getId()),
         _number(entity.getNumber()),
-        _balance(entity.getBalance()), 
-        _userName(entity.getUserName()) 
+        _balance(entity.getBalance()),
+        _userName(entity.getUserName())
     {
     }
 
@@ -185,3 +189,5 @@ struct AccountService
             throw std::invalid_argument("Error: Account user name cannot be empty");
     }
 };
+
+#endif // !ACCOUNT_MOCKS_H
