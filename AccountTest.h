@@ -2,6 +2,10 @@
 #ifndef ACCOUNT_TEST_H
 #define ACCOUNT_TEST_H
 
+#pragma region Utils
+void accountTestWrapper(void (*const)());
+#pragma endregion
+
 #pragma region Tests declaration
 void testCanCreateAccount();
 void testCannotCreateAccountWithInvalidName();
@@ -11,6 +15,7 @@ void testCanUpdateAccount();
 void testCannotUpdateAccountWithInvalidName();
 void testCannotUpdateAccountWithDuplicateNumber();
 
+// TODO [T2]: Final service implementation must ensure no card depends on this account
 void testCanRemoveAccount();
 void testCannotRemoveAccountWithInvalidId();
 
@@ -19,10 +24,6 @@ void testCanWithdraw();
 void testCannotOverdraft();
 
 void deamonTestWorks();
-#pragma endregion
-
-#pragma region Utils
-void accountTestWrapper(void (*const)());
 #pragma endregion
 
 inline void runAccountTestSuite()
