@@ -1,0 +1,6 @@
+[submodule "ATM-Frontend/vendor/imgui"]
+	path = ATM-Frontend/vendor/imgui
+	url = git@github.com:ocornut/imgui.git
+[submodule "ATM-Frontend/vendor/glfw"]
+	path = ATM-Frontend/vendor/glfw
+	url = git@github.com:glfw/glfw.git
