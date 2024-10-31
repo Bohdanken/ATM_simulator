@@ -11,6 +11,10 @@ endif()
 
 project ("ATM-Frontend")
 
+# Enforce C++20 standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # Paths to dependency libraries
 set(IMGUI_DIR "vendor/imgui")
 set(GLFW_DIR "vendor/glfw")
@@ -27,11 +31,14 @@ set(IMGUI_SOURCES
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
+# Include directories
+include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)
+
 # Add GLFW
 add_subdirectory(${GLFW_DIR} ${CMAKE_BINARY_DIR}/glfw_build)
 
-# Include directories
-include_directories(${IMGUI_DIR} ${IMGUI_DIR}/backends)
+# Add frontend app
+add_subdirectory(app)
 
 # Find required packages
 find_package(OpenGL REQUIRED)
@@ -40,7 +47,11 @@ find_package(OpenGL REQUIRED)
 add_executable (ATM-Frontend "main.cpp" ${IMGUI_SOURCES})
 
 # Link libraries
-target_link_libraries(ATM-Frontend PRIVATE glfw ${OPENGL_LIBRARIES})
+target_link_libraries(
+    ATM-Frontend PRIVATE
+    ${OPENGL_LIBRARIES}
+    AppUtil
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ATM-Frontend PROPERTY CXX_STANDARD 20)
