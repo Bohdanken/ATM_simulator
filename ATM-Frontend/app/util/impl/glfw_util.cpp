@@ -17,8 +17,9 @@ namespace ATM::Util
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor);
         if (run_compat)
+            // run in compatibility mode (supports older features)
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-        else 
+        else
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     }
 
@@ -30,6 +31,7 @@ namespace ATM::Util
 
     GLFWwindow *window_init(const int32_t width, const int32_t height, const char *const title)
     {
+        // Simple init for now, can be expanded later.
         GLFWwindow *window = glfwCreateWindow(width, height, title, nullptr, nullptr);
         if (!window)
         {
@@ -38,7 +40,10 @@ namespace ATM::Util
             std::exit(-1);
         }
         glfwMakeContextCurrent(window);
+        
+        // enables vsync, crucial to prevent cpu max-out
         glfwSwapInterval(1);
+        
         return window;
     }
 

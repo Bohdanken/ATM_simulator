@@ -29,15 +29,17 @@ int main()
         // Poll and handle events
         glfwPollEvents();
 
+        /* Handle all logic here (before rendering) */
+
         // Start the ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Render your UI
+        // Push UI updates
         renderUI();
 
-        // Rendering
+        // Render UI
         ImGui::Render();
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
