@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "libpqxx",
+    "boost"
+  ]
+}
