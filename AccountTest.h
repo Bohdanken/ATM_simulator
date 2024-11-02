@@ -6,6 +6,11 @@
 void accountTestWrapper(void (*const)());
 #pragma endregion
 
+int test_main(int, char* []) {
+    return 0;
+}
+
+
 #pragma region Tests declaration
 void testCanCreateAccount();
 void testCannotCreateAccountWithInvalidName();

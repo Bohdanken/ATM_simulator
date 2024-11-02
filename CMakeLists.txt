@@ -1,8 +1,15 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.15)
+cmake_policy(SET CMP0091 NEW)
+
 
 # Set project name
 project("ATM_simulator")
 
+set(CMAKE_TOOLCHAIN_FILE "conan_toolchain.cmake" CACHE STRING "Toolchain file")
+
+
+find_package(Boost)
+find_package(libpqxx)
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
     cmake_policy(SET CMP0141 NEW)
@@ -13,14 +20,9 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Include Conan build info
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
 
-# Add the executable for TestsProject
-add_executable(TestsProject "main.cpp" "AccountTest.h" "AccountTest.cpp" "CardTest.h" "utils/assert_utils.h")
+add_executable(TestsProject "repositories/AccountRepository.cpp" "repositories/AccountRepository.h" "AccountTest.h" "main.cpp")
 
 # Link the libraries provided by Conan
-target_link_libraries(TestsProject ${CONAN_LIBS})
+target_link_libraries(TestsProject PRIVATE  boost::boost libpqxx::pqxx)
 
-# TODO: Add tests and install targets if needed.

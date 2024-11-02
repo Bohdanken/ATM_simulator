@@ -36,7 +36,7 @@ public:
     /**
      * @brief Destructor to clean up the database connection.
      */
-    ~AccountRepository();
+    ~AccountRepository()=default;
 
     /**
      * @brief Clears all accounts from the database.
