@@ -11,29 +11,22 @@ AccountRepository::AccountRepository(const std::string& connectionStr)
     }
 
     // Prepare statements once on connection
-    conn.prepare("get_by_id", "SELECT id, user_name FROM client WHERE id = $1;");
-    conn.prepare("save_account", "INSERT INTO accounts (id, number, balance, user_name) VALUES ($1, $2, $3, $4);");
-    conn.prepare("update_account", "UPDATE accounts SET number = $1, balance = $2, user_name = $3 WHERE id = $4;");
-    conn.prepare("remove_account", "DELETE FROM accounts WHERE id = $1;");
+    conn.prepare("get_by_id", "SELECT id, client_id, number, balance FROM account WHERE id = $1;");
+    conn.prepare("save_account", "INSERT INTO account (client_id, number, balance) VALUES ($1, $2, $3) RETURNING id;");
+    conn.prepare("update_account", "UPDATE account SET number = $1, balance = $2 WHERE id = $3;");
+    conn.prepare("remove_account", "DELETE FROM account WHERE id = $1;");
 }
-
-
-int test_main(int, char* []) {
-    return 0;
-}
-
 
 void AccountRepository::clear() {
     try {
         pqxx::work txn(conn);
-        txn.exec("DELETE FROM accounts;");
+        txn.exec("DELETE FROM account;");
         txn.commit();
     }
     catch (const std::exception& e) {
         throw std::runtime_error(std::string("Failed to clear accounts: ") + e.what());
     }
 }
-
 
 std::optional<AccountEntity> AccountRepository::getById(uint64_t id) {
     try {
@@ -55,7 +48,7 @@ std::list<AccountEntity> AccountRepository::getAll() {
     std::list<AccountEntity> accountsList;
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec("SELECT id, number, balance, user_name FROM accounts;");
+        pqxx::result res = txn.exec("SELECT id, client_id, number, balance FROM account;");
         txn.commit();
 
         for (const auto& row : res) {
@@ -68,13 +61,15 @@ std::list<AccountEntity> AccountRepository::getAll() {
     return accountsList;
 }
 
-void AccountRepository::save(const AccountEntity& entity) {
+void AccountRepository::save(AccountEntity& entity) {
     try {
         pqxx::work txn(conn);
-        txn.exec_prepared("save_account", entity.id, entity.number, entity.balance, entity.userName);
+        pqxx::result res = txn.exec_prepared("save_account", entity.clientId, entity.number, entity.balance);
         txn.commit();
+    if (!res.empty()) {
+        entity.id = res[0]["id"].as<uint64_t>(); // Update the entity's id with the generated id
     }
-    catch (const std::exception& e) {
+}catch (const std::exception& e) {
         throw std::runtime_error(std::string("Failed to save account: ") + e.what());
     }
 }
@@ -82,7 +77,7 @@ void AccountRepository::save(const AccountEntity& entity) {
 void AccountRepository::update(uint64_t id, const AccountDTO& dto) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("update_account", dto.number, dto.balance, dto.userName, id);
+        pqxx::result res = txn.exec_prepared("update_account", dto.number, dto.balance, id);
         txn.commit();
 
         if (res.affected_rows() == 0) {
@@ -93,7 +88,6 @@ void AccountRepository::update(uint64_t id, const AccountDTO& dto) {
         throw std::runtime_error(std::string("Failed to update account: ") + e.what());
     }
 }
-
 
 void AccountRepository::remove(uint64_t id) {
     try {
@@ -110,12 +104,11 @@ void AccountRepository::remove(uint64_t id) {
     }
 }
 
-
 AccountEntity AccountRepository::mapRowToEntity(const pqxx::row& row) {
     AccountEntity entity;
     entity.id = row["id"].as<uint64_t>();
-    entity.number = row["number"].as<std::string>();
+    entity.clientId = row["client_id"].as<uint64_t>();
+    entity.number = row["number"].as<int64_t>();
     entity.balance = row["balance"].as<double>();
-    entity.userName = row["user_name"].as<std::string>();
     return entity;
 }

@@ -20,8 +20,9 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+message(STATUS "Include directories: ${CMAKE_INCLUDE_PATH}")
 
-add_executable(TestsProject "repositories/AccountRepository.cpp" "repositories/AccountRepository.h" "AccountTest.h" "main.cpp")
+add_executable(TestsProject "repositories/AccountRepository.cpp" "repositories/AccountRepository.h" "AccountTest.h" "main.cpp" "repositories/ClientRepository.h" "repositories/ClientRepository.cpp" "repositories/CardRepository.h" "repositories/CardRepository.cpp" "repositories/TransferRepository.cpp")
 
 # Link the libraries provided by Conan
 target_link_libraries(TestsProject PRIVATE  boost::boost libpqxx::pqxx)

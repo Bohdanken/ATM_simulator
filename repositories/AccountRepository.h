@@ -7,22 +7,21 @@
 #include <string>
 #include <pqxx/pqxx>
 
-// Forward declarations (Ensure these are properly defined in your project)
+// AccountEntity struct
 struct AccountEntity {
-    uint64_t id;
-    std::string number;
+    uint64_t id = 0;          // Initialize to 0
+    uint64_t clientId;
+    int64_t number;
     double balance;
-    std::string userName;
-
 };
 
+// AccountDTO struct
 struct AccountDTO {
-    std::string number;
+    int64_t number;           // Changed to int64_t to match AccountEntity
     double balance;
-    std::string userName;
-
 };
 
+// AccountRepository class
 class AccountRepository {
 public:
     /**
@@ -31,12 +30,12 @@ public:
      * @param connectionStr PostgreSQL connection string.
      *                     Example: "host=localhost port=5432 dbname=yourdb user=youruser password=yourpassword"
      */
-    AccountRepository(const std::string& connectionStr);
+    explicit AccountRepository(const std::string& connectionStr);
 
     /**
      * @brief Destructor to clean up the database connection.
      */
-    ~AccountRepository()=default;
+    ~AccountRepository() = default;
 
     /**
      * @brief Clears all accounts from the database.
@@ -71,7 +70,7 @@ public:
      *
      * @throws std::runtime_error if the operation fails.
      */
-    void save(const AccountEntity& entity);
+    void save(AccountEntity& entity);
 
     /**
      * @brief Updates an existing account's information.

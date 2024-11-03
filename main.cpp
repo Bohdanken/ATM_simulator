@@ -3,49 +3,67 @@
 
 int main() {
     try {
-        std::string connectionStr = "dbname=ATMSimulator user=postgres password=29072004";
+        // Connection string: replace with your actual database details
+        std::string connectionStr = "host=localhost port=5432 dbname=ATMSimulator user=postgres password=29072004";
+
+        // Instantiate the repository
         AccountRepository accountRepo(connectionStr);
 
+        // Clear all accounts initially (optional for testing purposes)
         accountRepo.clear();
-        std::cout << "All accounts cleared.\n";
+        std::cout << "Cleared all accounts.\n";
 
-        // Test: Add a new account
-        AccountEntity newAccount{ 1, "12345678", 1000.0, "John Doe" }; 
+        // Test - Add a new account
+        AccountEntity newAccount{ 0, 1, 1000005, 1000.50 }; // Adjust clientId, number, and balance as needed
         accountRepo.save(newAccount);
-        std::cout << "New account saved.\n";
+        std::cout << "Account added.\n";
 
-        // Test: Retrieve account by ID
-        auto retrievedAccount = accountRepo.getById(1);
+        // Test - Retrieve all accounts and display them
+        auto accounts = accountRepo.getAll();
+        std::cout << "All accounts:\n";
+        for (const auto& account : accounts) {
+            std::cout << "ID: " << account.id
+                << ", ClientID: " << account.clientId
+                << ", Number: " << account.number
+                << ", Balance: " << account.balance << '\n';
+        }
+
+        // Test - Retrieve account by ID
+        auto retrievedAccount = accountRepo.getById(newAccount.id);
         if (retrievedAccount) {
-            std::cout << "Account retrieved: " << retrievedAccount->userName << "\n";
+            std::cout << "Retrieved account with ID " << retrievedAccount->id
+                << ": Balance = " << retrievedAccount->balance << '\n';
         }
         else {
             std::cout << "Account not found.\n";
         }
 
-        // Test: Update account
-        AccountDTO updatedAccount{ "87654321", 2000.0, "Jane Doe" };
-        accountRepo.update(1, updatedAccount);
+        // Test - Update account
+        AccountDTO updateData{ 1000005, 2000.75 };
+        accountRepo.update(newAccount.id, updateData);
         std::cout << "Account updated.\n";
 
-        // Verify update
-        retrievedAccount = accountRepo.getById(1);
+        // Verify the update
+        retrievedAccount = accountRepo.getById(newAccount.id);
         if (retrievedAccount) {
-            std::cout << "Updated Account: " << retrievedAccount->userName << ", Balance: " << retrievedAccount->balance << "\n";
+            std::cout << "Updated account balance: " << retrievedAccount->balance << '\n';
         }
 
-        // Test: Remove account
-        accountRepo.remove(1);
+        // Test - Remove account
+        accountRepo.remove(newAccount.id);
         std::cout << "Account removed.\n";
 
         // Verify removal
-        retrievedAccount = accountRepo.getById(1);
+        retrievedAccount = accountRepo.getById(newAccount.id);
         if (!retrievedAccount) {
-            std::cout << "Account successfully deleted.\n";
+            std::cout << "Account successfully removed.\n";
+        }
+        else {
+            std::cout << "Failed to remove account.\n";
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "An error occurred: " << e.what() << "\n";
+        std::cerr << "An error occurred: " << e.what() << '\n';
     }
 
     return 0;
