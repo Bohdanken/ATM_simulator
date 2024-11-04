@@ -9,6 +9,8 @@
 namespace ATM::Util
 {
     void imgui_init(GLFWwindow *const window);
+    void imgui_start_frame();
+    void imgui_render_frame(GLFWwindow *const window);
     void imgui_cleanup();
 };
 

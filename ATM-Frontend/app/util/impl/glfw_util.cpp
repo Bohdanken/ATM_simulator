@@ -1,4 +1,5 @@
 #include "glfw_util.h"
+#include "window_config.h"
 
 #include <iostream>
 
@@ -39,6 +40,11 @@ namespace ATM::Util
             glfwTerminate();
             std::exit(-1);
         }
+        glfwSetWindowSizeLimits(
+            window, 
+            Config::MIN_WIN_WIDTH, Config::MIN_WIN_HEIGHT, 
+            GLFW_DONT_CARE, GLFW_DONT_CARE
+        );
         glfwMakeContextCurrent(window);
         
         // enables vsync, crucial to prevent cpu max-out

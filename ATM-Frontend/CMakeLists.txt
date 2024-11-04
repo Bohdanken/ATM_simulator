@@ -50,5 +50,6 @@ add_executable (ATM-Frontend "main.cpp" ${IMGUI_SOURCES})
 target_link_libraries(
     ATM-Frontend PRIVATE
     ${OPENGL_LIBRARIES}
+    AppConfig
     AppUtil
 )
