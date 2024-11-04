@@ -6,22 +6,13 @@
 #include <cstdint>
 #include <string>
 #include <pqxx/pqxx>
+#include "../Entities/AccountEntity.h"
+#include <stdexcept>
+#include <sstream>
+#include "../DTO/AccountDTO.h"
 
-// AccountEntity struct
-struct AccountEntity {
-    uint64_t id = 0;          // Initialize to 0
-    uint64_t clientId;
-    int64_t number;
-    double balance;
-};
 
-// AccountDTO struct
-struct AccountDTO {
-    int64_t number;           // Changed to int64_t to match AccountEntity
-    double balance;
-};
 
-// AccountRepository class
 class AccountRepository {
 public:
     /**
@@ -30,12 +21,12 @@ public:
      * @param connectionStr PostgreSQL connection string.
      *                     Example: "host=localhost port=5432 dbname=yourdb user=youruser password=yourpassword"
      */
-    explicit AccountRepository(const std::string& connectionStr);
+    AccountRepository(const std::string& connectionStr);
 
     /**
      * @brief Destructor to clean up the database connection.
      */
-    ~AccountRepository() = default;
+    ~AccountRepository()=default;
 
     /**
      * @brief Clears all accounts from the database.
@@ -70,7 +61,7 @@ public:
      *
      * @throws std::runtime_error if the operation fails.
      */
-    void save(AccountEntity& entity);
+    void save( AccountEntity& entity);
 
     /**
      * @brief Updates an existing account's information.

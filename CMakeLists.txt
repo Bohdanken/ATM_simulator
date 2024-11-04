@@ -10,6 +10,7 @@ set(CMAKE_TOOLCHAIN_FILE "conan_toolchain.cmake" CACHE STRING "Toolchain file")
 
 find_package(Boost)
 find_package(libpqxx)
+
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
     cmake_policy(SET CMP0141 NEW)
@@ -22,7 +23,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "Include directories: ${CMAKE_INCLUDE_PATH}")
 
-add_executable(TestsProject "repositories/AccountRepository.cpp" "repositories/AccountRepository.h" "AccountTest.h" "main.cpp" "repositories/ClientRepository.h" "repositories/ClientRepository.cpp" "repositories/CardRepository.h" "repositories/CardRepository.cpp" "repositories/TransferRepository.cpp")
+file(GLOB SOURCE_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/repositories/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Entities/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/DTO/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Services/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/utils/*.cpp"
+    # Add other directories as needed
+)
+
+add_executable(TestsProject ${SOURCE_FILES} "main.cpp")
 
 # Link the libraries provided by Conan
 target_link_libraries(TestsProject PRIVATE  boost::boost libpqxx::pqxx)

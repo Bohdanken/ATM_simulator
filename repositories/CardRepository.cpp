@@ -1,6 +1,5 @@
 // CardRepository.cpp
 #include "CardRepository.h"
-#include <stdexcept>
 
 CardRepository::CardRepository(const std::string& connectionStr)
     : conn(connectionStr)
@@ -67,11 +66,11 @@ std::list<CardEntity> CardRepository::getAll() {
 void CardRepository::save(CardEntity& entity) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("save_card", entity.accountId, entity.number, entity.pin);
+        pqxx::result res = txn.exec_prepared("save_card", entity.getAccountId(), entity.getNumber(), entity.getPin());
         txn.commit();
 
         if (!res.empty()) {
-            entity.id = res[0]["id"].as<uint64_t>(); // Update the entity's id with the generated id
+            entity.setId(res[0]["id"].as<uint64_t>()); 
         }
     }
     catch (const std::exception& e) {
@@ -82,7 +81,7 @@ void CardRepository::save(CardEntity& entity) {
 void CardRepository::update(uint64_t id, const CardDTO& dto) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("update_card", dto.number, dto.pin, id);
+        pqxx::result res = txn.exec_prepared("update_card", dto.getNumber(), dto.getPin(), dto.getId());
         txn.commit();
 
         if (res.affected_rows() == 0) {
@@ -111,9 +110,9 @@ void CardRepository::remove(uint64_t id) {
 
 CardEntity CardRepository::mapRowToEntity(const pqxx::row& row) {
     CardEntity entity;
-    entity.id = row["id"].as<uint64_t>();
-    entity.accountId = row["account_id"].as<uint64_t>();
-    entity.number = row["number"].as<int64_t>();
-    entity.pin = row["pin"].as<int>();
+    entity.setId(row["id"].as<uint64_t>());
+    entity.setAccountId(row["account_id"].as<uint64_t>());
+    entity.setNumber(row["number"].as<int64_t>());
+    entity.setPin(row["pin"].as<int>());
     return entity;
 }

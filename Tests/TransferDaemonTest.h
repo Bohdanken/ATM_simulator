@@ -2,7 +2,6 @@
 #ifndef TRANSFER_DAEMON_TEST_H
 #define TRANSFER_DAEMON_TEST_H
 
-#include "mocks/TransferDaemonMocks.h"
 
 inline void testTransferDaemon()
 {

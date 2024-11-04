@@ -5,21 +5,9 @@
 #include <pqxx/pqxx>
 #include <optional>
 #include <list>
-#include "TransferEntity.h"
-
-struct TransferEntity {
-    uint64_t id = 0;              // Automatically assigned ID (BIGSERIAL)
-    uint64_t fromAccountId;       // from_account_id
-    uint64_t toAccountId;         // to_account_id
-    double amount;                // amount
-    std::string datetime;         // datetime (TIMESTAMP as string)
-};
-
-struct TransferDTO {
-    uint64_t fromAccountId;
-    uint64_t toAccountId;
-    double amount;
-};
+#include "../Entities/TransferEntity.h"
+#include "../utils/time_utils.h"
+#include "../DTO/TransferDTO.h" 
 
 struct TransferRepository {
 public:
@@ -79,6 +67,16 @@ public:
      * @throws std::runtime_error if the operation fails.
      */
     void remove(uint64_t id);
+
+    /**
+ * @brief Updates an existing transfer's information.
+ *
+ * @param id The unique identifier of the transfer to update.
+ * @param dto The data transfer object containing updated information.
+ *
+ * @throws std::runtime_error if the operation fails or the card is not found.
+ */
+    void update(uint64_t id, const TransferDTO& dto);
 
 private:
     /**

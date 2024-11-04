@@ -1,7 +1,5 @@
 // ClientRepository.cpp
 #include "ClientRepository.h"
-#include <stdexcept>
-#include <sstream>
 
 ClientRepository::ClientRepository(const std::string& connectionStr)
     : conn(connectionStr)
@@ -68,11 +66,11 @@ std::list<ClientEntity> ClientRepository::getAll() {
 void ClientRepository::save(ClientEntity& entity) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("save_client", entity.userName, entity.name, entity.email);
+        pqxx::result res = txn.exec_prepared("save_client", entity.getUserName(), entity.getName(), entity.getEmail());
         txn.commit();
 
         if (!res.empty()) {
-            entity.id = res[0]["id"].as<uint64_t>(); // Update the entity's id with the generated id
+            entity.setId(res[0]["id"].as<uint64_t>()); // Update the entity's id with the generated id
         }
     }
     catch (const std::exception& e) {
@@ -83,7 +81,7 @@ void ClientRepository::save(ClientEntity& entity) {
 void ClientRepository::update(uint64_t id, const ClientDTO& dto) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("update_client", dto.userName, dto.name, dto.email, id);
+        pqxx::result res = txn.exec_prepared("update_client", dto.getUserName(), dto.getName(), dto.getEmail(), dto.getId());
         txn.commit();
 
         if (res.affected_rows() == 0) {
@@ -112,9 +110,10 @@ void ClientRepository::remove(uint64_t id) {
 
 ClientEntity ClientRepository::mapRowToEntity(const pqxx::row& row) {
     ClientEntity entity;
-    entity.id = row["id"].as<uint64_t>();
-    entity.userName = row["user_name"].as<std::string>();
-    entity.name = row["name"].as<std::string>();
-    entity.email = row["email"].as<std::string>();
+    entity.setId(row["id"].as<uint64_t>());
+    entity.setUserName(row["user_name"].as<std::string>());
+    entity.setName(row["name"].as<std::string>());
+    entity.setEmail(row["email"].as<std::string>());
     return entity;
 }
+

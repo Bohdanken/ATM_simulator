@@ -1,24 +1,15 @@
-// CardEntity.h
 #pragma once
 #include <cstdint>
 #include <pqxx/pqxx>
 #include <optional>
 #include <list>
+#include "../Entities/CardEntity.h"
+#include "../DTO/CardDTO.h"
+#include <stdexcept>
 
 
-struct CardEntity {
-    uint64_t id = 0;        // Automatically assigned ID (BIGSERIAL)
-    uint64_t accountId;     // account_id
-    int64_t number;         // number
-    int pin;                // pin
-};
 
-struct CardDTO {
-    int64_t number;
-    int pin;
-};
-
-class CardRepository {
+struct CardRepository {
 public:
     /**
      * @brief Constructs a CardRepository with the given connection string.

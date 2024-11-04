@@ -1,7 +1,4 @@
 #include "AccountRepository.h"
-#include <pqxx/pqxx>
-#include <stdexcept>
-#include <sstream>
 
 AccountRepository::AccountRepository(const std::string& connectionStr)
     : conn(connectionStr)
@@ -64,10 +61,10 @@ std::list<AccountEntity> AccountRepository::getAll() {
 void AccountRepository::save(AccountEntity& entity) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("save_account", entity.clientId, entity.number, entity.balance);
+        pqxx::result res = txn.exec_prepared("save_account", entity.getClientId(), entity.getNumber(), entity.getBalance());
         txn.commit();
     if (!res.empty()) {
-        entity.id = res[0]["id"].as<uint64_t>(); // Update the entity's id with the generated id
+        entity.setId(res[0]["id"].as<uint64_t>()); 
     }
 }catch (const std::exception& e) {
         throw std::runtime_error(std::string("Failed to save account: ") + e.what());
@@ -77,7 +74,7 @@ void AccountRepository::save(AccountEntity& entity) {
 void AccountRepository::update(uint64_t id, const AccountDTO& dto) {
     try {
         pqxx::work txn(conn);
-        pqxx::result res = txn.exec_prepared("update_account", dto.number, dto.balance, id);
+        pqxx::result res = txn.exec_prepared("update_account", dto.getNumber(), dto.getBalance(), dto.getId());
         txn.commit();
 
         if (res.affected_rows() == 0) {
@@ -106,9 +103,10 @@ void AccountRepository::remove(uint64_t id) {
 
 AccountEntity AccountRepository::mapRowToEntity(const pqxx::row& row) {
     AccountEntity entity;
-    entity.id = row["id"].as<uint64_t>();
-    entity.clientId = row["client_id"].as<uint64_t>();
-    entity.number = row["number"].as<int64_t>();
-    entity.balance = row["balance"].as<double>();
+    entity.setId(row["id"].as<uint64_t>());
+    entity.setClientId(row["client_id"].as<uint64_t>());
+    entity.setNumber(row["number"].as<int64_t>());
+    entity.setBalance(row["balance"].as<double>());
     return entity;
 }
+

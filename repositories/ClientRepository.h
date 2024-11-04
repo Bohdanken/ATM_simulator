@@ -4,20 +4,12 @@
 #include <optional>
 #include <list>
 #include <string>
+#include <stdexcept>
+#include <sstream>
+#include "../Entities/ClientEntity.h"
+#include "../DTO/ClientDTO.h"
 
 
-struct ClientEntity {
-    uint64_t id = 0;         // Initialize to 0
-    std::string userName;
-    std::string name;
-    std::string email;
-};
-
-struct ClientDTO {
-    std::string userName;
-    std::string name;
-    std::string email;
-};
 
 class ClientRepository {
 public:
