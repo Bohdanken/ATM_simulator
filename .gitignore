@@ -15,6 +15,14 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
+build/
+conanbuild.bat
+conanbuildenv-release-x86_64.bat
+conanrun.bat
+conanrunenv-release-x86_64.bat
+deactivate_conanbuild.bat
+deactivate_conanrun.bat
+
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 

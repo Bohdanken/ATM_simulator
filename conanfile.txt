@@ -1,0 +1,11 @@
+[requires]
+boost/1.86.0
+libpqxx/7.7.5
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[options]
+boost/*:shared=True
+libpqxx/*s:shared=True
