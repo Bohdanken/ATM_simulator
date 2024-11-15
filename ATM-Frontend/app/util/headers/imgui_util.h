@@ -12,6 +12,6 @@ namespace ATM::Util
     void imgui_start_frame();
     void imgui_render_frame(GLFWwindow *const window);
     void imgui_cleanup();
-};
+}
 
 #endif // !IMGUI_UTIL_H

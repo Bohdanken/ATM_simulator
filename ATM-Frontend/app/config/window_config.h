@@ -8,6 +8,11 @@
 
 namespace ATM::Config
 {
+    constexpr const char *WIN_TITLE = "ATM";
+
+    /* Currently being discarded due to ImGuiWindowFlags_NoTitleBar in MAIN_WIN_FLAGS */
+    constexpr const char *MAIN_WIN_TITLE = "ATM Main";
+
     /* Window default size (~16:9) */
     constexpr int32_t WIN_WIDTH = 1066;
     constexpr int32_t WIN_HEIGHT = 600;
@@ -29,6 +34,6 @@ namespace ATM::Config
         ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoBringToFrontOnFocus;
-};
+}
 
 #endif // !WINDOW_CONFIG_H

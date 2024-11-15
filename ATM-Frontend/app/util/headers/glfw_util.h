@@ -14,6 +14,6 @@ namespace ATM::Util
     
     // Could be moved into a separate logging system, if time permits
     void glfw_log_info();
-};
+}
 
 #endif // !GLFW_UTIL_H

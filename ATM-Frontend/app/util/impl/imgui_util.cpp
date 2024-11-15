@@ -73,4 +73,4 @@ namespace ATM::Util
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
     }
-};
+}

@@ -59,4 +59,4 @@ namespace ATM::Util
         std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
         std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     }
-};
+}
