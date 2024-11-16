@@ -12,6 +12,11 @@ ClientDTO::ClientDTO(const ClientEntity& entity)
 ClientDTO::ClientDTO(const ClientDTO& other)
     : _id(other._id), _userName(other._userName), _name(other._name), _email(other._email) {}
 
+ClientDTO::ClientDTO(const std::string& userName, const std::string& name, const std::string& email)
+    : _id(0), _userName(userName), _name(name), _email(email) {
+    // Поле `_id` ініціалізується значенням за замовчуванням (0)
+}
+
 ClientDTO& ClientDTO::operator=(const ClientDTO& other) {
     if (this != &other) {
         _id = other._id;

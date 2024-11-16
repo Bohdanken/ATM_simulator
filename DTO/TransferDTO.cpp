@@ -24,6 +24,9 @@ TransferDTO::TransferDTO(TransferDTO&& other) noexcept
     other._amount = 0;
 }
 
+TransferDTO::TransferDTO(uint64_t fromAccountId, uint64_t toAccountId, uint64_t amount, const DateTime& datetime)
+    : _id(0), _fromAccountId(fromAccountId), _toAccountId(toAccountId), _amount(amount), _datetime(datetime) {}
+
 TransferDTO& TransferDTO::operator=(TransferDTO&& other) noexcept {
     if (this != &other) {
         _id = other._id;

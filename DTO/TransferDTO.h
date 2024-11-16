@@ -4,12 +4,11 @@
 #include "../Entities/TransferEntity.h"
 #include "../utils/time_utils.h"
 
-/**
- * @brief Data Transfer Object for Transfer.
- */
+
 class TransferDTO {
 public:
     TransferDTO();
+    TransferDTO(uint64_t fromAccountId, uint64_t toAccountId, uint64_t amount, const DateTime& datetime);
     TransferDTO(const TransferEntity& entity);
     TransferDTO(const TransferDTO& other) = default;
     TransferDTO& operator=(const TransferDTO& other) = default;
@@ -27,6 +26,8 @@ public:
     void setToAccountId(uint64_t toAccountId);
     void setAmount(uint64_t amount);
     void setDateTime(const DateTime& datetime);
+
+private:
     uint64_t _id;
     uint64_t _fromAccountId;
     uint64_t _toAccountId;

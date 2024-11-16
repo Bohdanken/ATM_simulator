@@ -1,4 +1,3 @@
-// AccountDTO.h
 #pragma once
 #include <string>
 #include <cstdint>
@@ -10,6 +9,7 @@
 class AccountDTO {
 public:
     AccountDTO();
+    AccountDTO(uint64_t number, uint64_t balance, uint64_t clientId); // New constructor
     AccountDTO(const AccountEntity& entity);
     AccountDTO(const AccountDTO& other);
     AccountDTO& operator=(const AccountDTO& other);
