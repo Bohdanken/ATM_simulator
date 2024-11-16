@@ -117,3 +117,13 @@ ClientEntity ClientRepository::mapRowToEntity(const pqxx::row& row) {
     return entity;
 }
 
+
+ClientRepository::ClientRepository(ClientRepository&& other) noexcept
+    : conn(std::move(other.conn)) {}
+
+ClientRepository& ClientRepository::operator=(ClientRepository&& other) noexcept {
+    if (this != &other) {
+        conn = std::move(other.conn);
+    }
+    return *this;
+}

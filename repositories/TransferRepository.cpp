@@ -120,3 +120,13 @@ TransferEntity TransferRepository::mapRowToEntity(const pqxx::row& row) {
     //entity.setDateTime(DateTime::fromString(row["datetime"].c_str())); TODO
     return entity;
 }
+
+TransferRepository::TransferRepository(TransferRepository&& other) noexcept
+    : conn(std::move(other.conn)) {}
+
+TransferRepository& TransferRepository::operator=(TransferRepository&& other) noexcept {
+    if (this != &other) {
+        conn = std::move(other.conn);
+    }
+    return *this;
+}

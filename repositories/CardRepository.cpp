@@ -116,3 +116,13 @@ CardEntity CardRepository::mapRowToEntity(const pqxx::row& row) {
     entity.setPin(row["pin"].as<int>());
     return entity;
 }
+
+CardRepository::CardRepository(CardRepository&& other) noexcept
+    : conn(std::move(other.conn)) {}
+
+CardRepository& CardRepository::operator=(CardRepository&& other) noexcept {
+    if (this != &other) {
+        conn = std::move(other.conn);
+    }
+    return *this;
+}
