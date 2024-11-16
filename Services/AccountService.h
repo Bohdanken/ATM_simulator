@@ -11,17 +11,18 @@
  */
 class AccountService {
 public:
-    //AccountService(const std::string& connectionStr);
     static AccountDTO create(const AccountDTO& dto);
     static void update(uint64_t id, const AccountDTO& dto);
     static void remove(uint64_t id);
     static AccountDTO getById(uint64_t id);
     static void deposit(uint64_t id, uint64_t sum);
     static void withdraw(uint64_t id, uint64_t sum);
+    static void setRepository(AccountRepository& accountRepository);
 
 private:
-    static AccountRepository accountRepository;
+    inline static AccountRepository* accountRepository = nullptr;
     static void validateCreate(const AccountDTO& dto);
     static void validateUpdate(uint64_t id, const AccountDTO& dto);
     static void validateClientId(const AccountDTO& dto);
 };
+

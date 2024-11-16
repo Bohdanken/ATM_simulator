@@ -110,3 +110,12 @@ AccountEntity AccountRepository::mapRowToEntity(const pqxx::row& row) {
     return entity;
 }
 
+AccountRepository::AccountRepository(AccountRepository&& other) noexcept
+    : conn(std::move(other.conn)) {}
+
+AccountRepository& AccountRepository::operator=(AccountRepository&& other) noexcept {
+    if (this != &other) {
+        conn = std::move(other.conn);
+    }
+    return *this;
+}

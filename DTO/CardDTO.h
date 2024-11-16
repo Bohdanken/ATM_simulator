@@ -1,4 +1,3 @@
-// CardDTO.h
 #pragma once
 #include <cstdint>
 #include "../Entities/CardEntity.h"
@@ -9,6 +8,7 @@
 class CardDTO {
 public:
     CardDTO();
+    CardDTO(uint64_t accountId, int64_t number, uint16_t pin); // Новий конструктор
     CardDTO(const CardEntity& entity);
     CardDTO(const CardDTO& other);
     CardDTO& operator=(const CardDTO& other);

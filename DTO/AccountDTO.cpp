@@ -9,6 +9,11 @@ AccountDTO::AccountDTO(const AccountEntity& entity)
 AccountDTO::AccountDTO(const AccountDTO& other)
     : _id(other._id), _number(other._number), _balance(other._balance), _clientId(other.getClientId()) {}
 
+AccountDTO::AccountDTO(uint64_t number, uint64_t balance, uint64_t clientId)
+    : _number(number), _balance(balance), _clientId(clientId), _id(0) { // Default ID to 0
+}
+
+
 AccountDTO& AccountDTO::operator=(const AccountDTO& other) {
     if (this != &other) {
         _id = other.getId();

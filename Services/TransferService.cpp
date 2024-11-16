@@ -1,11 +1,10 @@
 #include "TransferService.h"
 
-//TransferService::TransferService(TransferRepository& transferRepo, AccountRepository& accountRepo)
-//    : transferRepository(transferRepo), accountRepository(accountRepo) {}
 
-TransferRepository TransferService::transferRepository("");
-AccountRepository TransferService::accountRepository("");
-
+void TransferService::setRepository(TransferRepository& transferRepo, AccountRepository& accountRepo) {
+    TransferService::transferRepository = &transferRepo;
+    TransferService::accountRepository = &accountRepo;
+}
 
 TransferDTO TransferService::create(const TransferDTO& dto) {
     validateCreate(dto);
@@ -14,35 +13,35 @@ TransferDTO TransferService::create(const TransferDTO& dto) {
     entity.setToAccountId(dto.getToAccountId());
     entity.setAmount(dto.getAmount());
     entity.setDateTime(dto.getDateTime());
-    transferRepository.save(entity);  
+    transferRepository->save(entity); 
     return TransferDTO(entity);
 }
 
 void TransferService::update(uint64_t id, const TransferDTO& dto) {
     validateUpdate(id, dto);
-    transferRepository.update(id, dto);  
+    transferRepository->update(id, dto); 
 }
 
 void TransferService::remove(uint64_t id) {
-    auto optEntity = transferRepository.getById(id);  
+    auto optEntity = transferRepository->getById(id); 
     if (!optEntity.has_value())
         throw std::invalid_argument("Error: Cannot delete a transfer that doesn't exist");
-    transferRepository.remove(id);  
+    transferRepository->remove(id); 
 }
 
 TransferDTO TransferService::getById(uint64_t id) {
-    auto optEntity = transferRepository.getById(id);  
+    auto optEntity = transferRepository->getById(id); 
     if (!optEntity.has_value())
         throw std::invalid_argument("Error: Cannot get a DTO of a transfer that does not exist");
     return TransferDTO(optEntity.value());
 }
 
 void TransferService::validateCreate(const TransferDTO& dto) {
-    auto optFromAccountEntity = accountRepository.getById(dto.getFromAccountId());  
+    auto optFromAccountEntity = accountRepository->getById(dto.getFromAccountId()); 
     if (!optFromAccountEntity.has_value())
         throw std::invalid_argument("Error: Cannot create a transfer from an account that doesn't exist");
 
-    auto optToAccountEntity = accountRepository.getById(dto.getToAccountId());  
+    auto optToAccountEntity = accountRepository->getById(dto.getToAccountId()); 
     if (!optToAccountEntity.has_value())
         throw std::invalid_argument("Error: Cannot create a transfer to an account that doesn't exist");
 
@@ -51,15 +50,15 @@ void TransferService::validateCreate(const TransferDTO& dto) {
 }
 
 void TransferService::validateUpdate(uint64_t id, const TransferDTO& dto) {
-    auto optEntity = transferRepository.getById(id); 
+    auto optEntity = transferRepository->getById(id); 
     if (!optEntity.has_value())
         throw std::invalid_argument("Error: Cannot update a transfer that doesn't exist");
 
-    auto optFromAccountEntity = accountRepository.getById(dto.getFromAccountId()); 
+    auto optFromAccountEntity = accountRepository->getById(dto.getFromAccountId()); 
     if (!optFromAccountEntity.has_value())
         throw std::invalid_argument("Error: Cannot update a transfer to be from an account that doesn't exist");
 
-    auto optToAccountEntity = accountRepository.getById(dto.getToAccountId()); 
+    auto optToAccountEntity = accountRepository->getById(dto.getToAccountId()); 
     if (!optToAccountEntity.has_value())
         throw std::invalid_argument("Error: Cannot update a transfer to be to an account that doesn't exist");
 

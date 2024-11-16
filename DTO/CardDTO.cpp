@@ -9,6 +9,11 @@ CardDTO::CardDTO(const CardEntity& entity)
 CardDTO::CardDTO(const CardDTO& other)
     : _id(other._id), _accountId(other._accountId), _number(other._number), _pin(other._pin) {}
 
+CardDTO::CardDTO(uint64_t accountId, int64_t number, uint16_t pin)
+    : _id(0), _accountId(accountId), _number(number), _pin(pin) {
+    // Поле `_id` ініціалізується значенням за замовчуванням (0)
+}
+
 CardDTO& CardDTO::operator=(const CardDTO& other) {
     if (this != &other) {
         _id = other._id;
