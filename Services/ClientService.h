@@ -9,14 +9,14 @@
  */
 class ClientService {
 public:
-    //ClientService(ClientRepository& clientRepo);
+    static void setRepository(ClientRepository& clientRepository);
     static ClientDTO create(const ClientDTO& dto);
     static void update(uint64_t id, const ClientDTO& dto);
     static void remove(uint64_t id);
     static ClientDTO getById(uint64_t id);
 
 private:
-    static ClientRepository clientRepository;
+    inline static ClientRepository* clientRepository= nullptr;
     static void validateCreate(const ClientDTO& dto);
     static void validateUpdate(uint64_t id, const ClientDTO& dto);
     static void validateEmail(const ClientDTO& dto);
