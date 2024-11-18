@@ -18,6 +18,7 @@ public:
     static void deposit(uint64_t id, uint64_t sum);
     static void withdraw(uint64_t id, uint64_t sum);
     static void setRepository(AccountRepository& accountRepository);
+    static AccountDTO getByNumber(int64_t number);
 
 private:
     inline static AccountRepository* accountRepository = nullptr;

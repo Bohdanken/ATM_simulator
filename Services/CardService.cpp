@@ -66,3 +66,11 @@ void CardService::validatePin(const CardDTO& dto) {
     if (dto.getPin() > 9999)
         throw std::invalid_argument("Error: Card PIN must be in range from 0000 to 9999");
 }
+
+CardDTO CardService::getByNumber(long long number) {
+    auto optEntity = cardRepository->getByNumber(number);
+    if (!optEntity.has_value())
+        throw std::invalid_argument("Error: Card with the specified number does not exist");
+    return CardDTO(optEntity.value());
+}
+

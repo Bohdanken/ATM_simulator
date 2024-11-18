@@ -31,6 +31,7 @@ public:
 
     void save(CardEntity& entity);
 
+    std::optional<CardEntity> getByNumber(int64_t number);
 
     void update(uint64_t id, const CardDTO& dto);
 

@@ -76,3 +76,14 @@ void AccountService::validateClientId(const AccountDTO& dto) {
     if (dto.getClientId() == -1)
         throw std::invalid_argument("Error: Account ClientId cannot be empty");
 }
+
+AccountDTO AccountService::getByNumber(int64_t number) {
+    auto optEntity = accountRepository->getByNumber(number);
+    if (!optEntity.has_value()) {
+        throw std::invalid_argument("Error: Account with the specified number does not exist");
+    }
+    return AccountDTO(optEntity.value());
+}
+
+
+

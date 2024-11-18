@@ -17,6 +17,9 @@ CardRepository::CardRepository(const std::string& connectionStr)
         "UPDATE card SET number = $1, pin = $2 WHERE id = $3;");
     conn.prepare("remove_card",
         "DELETE FROM card WHERE id = $1;");
+    conn.prepare("get_card_by_number",
+        "SELECT id, account_id, number, pin FROM card WHERE number = $1;");
+
 }
 
 void CardRepository::clear() {
@@ -29,6 +32,24 @@ void CardRepository::clear() {
         throw std::runtime_error("Failed to clear cards: " + std::string(e.what()));
     }
 }
+
+
+std::optional<CardEntity> CardRepository::getByNumber(int64_t number) {
+    try {
+        pqxx::work txn(conn);
+        pqxx::result res = txn.exec_prepared("get_card_by_number", number);
+        txn.commit();
+
+        if (res.size() == 1) {
+            return mapRowToEntity(res[0]);
+        }
+        return std::nullopt;
+    }
+    catch (const std::exception& e) {
+        throw std::runtime_error("Failed to get card by number: " + std::string(e.what()));
+    }
+}
+
 
 std::optional<CardEntity> CardRepository::getById(uint64_t id) {
     try {

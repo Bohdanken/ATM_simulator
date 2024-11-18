@@ -12,6 +12,8 @@ AccountRepository::AccountRepository(const std::string& connectionStr)
     conn.prepare("save_account", "INSERT INTO account (client_id, number, balance) VALUES ($1, $2, $3) RETURNING id;");
     conn.prepare("update_account", "UPDATE account SET number = $1, balance = $2 WHERE id = $3;");
     conn.prepare("remove_account", "DELETE FROM account WHERE id = $1;");
+    conn.prepare("get_by_number", "SELECT id, client_id, number, balance FROM account WHERE number = $1;");
+
 }
 
 void AccountRepository::clear() {
@@ -24,6 +26,23 @@ void AccountRepository::clear() {
         throw std::runtime_error(std::string("Failed to clear accounts: ") + e.what());
     }
 }
+
+std::optional<AccountEntity> AccountRepository::getByNumber(int64_t number) {
+    try {
+        pqxx::work txn(conn);
+        pqxx::result res = txn.exec_prepared("get_by_number", number);
+        txn.commit();
+
+        if (res.size() == 1) {
+            return mapRowToEntity(res[0]);
+        }
+        return std::nullopt;
+    }
+    catch (const std::exception& e) {
+        throw std::runtime_error(std::string("Failed to get account by number: ") + e.what());
+    }
+}
+
 
 std::optional<AccountEntity> AccountRepository::getById(uint64_t id) {
     try {

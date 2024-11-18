@@ -41,6 +41,7 @@ public:
     AccountRepository& operator=(const AccountRepository&) = delete;
     AccountRepository(AccountRepository&& other) noexcept;
     AccountRepository& operator=(AccountRepository&& other) noexcept;
+    std::optional<AccountEntity> getByNumber(int64_t number);
 
 
 private:
