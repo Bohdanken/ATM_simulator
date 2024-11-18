@@ -9,6 +9,7 @@
 #include "imgui_util.h"
 
 #include <iostream>
+#include <cstdint>
 
 using namespace ATM;
 
@@ -19,6 +20,7 @@ static bool is_authorised = false;
 // Frontend buffers
 static char pin_input[5];      //  4 digits
 static char account_input[13]; // 12 digits
+static char test_input[9];     //  8 digits
 
 static void renderUI()
 {
@@ -85,6 +87,12 @@ static void renderUI()
     }
     else // is authenticated && is autorised
     {
+        ImGui::Text("Authenticated && authorised");
+        ImGui::InputText(
+            Config::ACCOUNT_NUMBER_INPUT_TITLE,
+            test_input,
+            IM_ARRAYSIZE(test_input)
+        );
         // Present core atm functionality
         // allow to exit from the menu (reset permissions)
     }
@@ -112,18 +120,78 @@ static void renderUI()
     ImGui::End();
 }
 
-static void validate_input()
+static void clear_buffer(char *const buffer, const int32_t size)
+{   
+    for (int32_t i = 0; i < size; i++)
+    {
+        buffer[i] = '\0';
+    }
+}
+
+static bool is_valid_authentication()
 {
-    // Will launch modal error dialog when validation fails
+    for (int32_t i = 0; i < IM_ARRAYSIZE(account_input) - 1; i++)
+    {
+        if (!(account_input[i] >= '0' && account_input[i] <= '9'))
+        {
+            std::cerr << "Error: invalid characters present in account input buffer" << std::endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+static bool is_valid_authorisation()
+{
+    return true;
+}
+
+static bool is_valid_core()
+{
+    return true;
 }
 
 static void process_events()
 {
     if (ImGui::IsKeyPressed(ImGuiKey_Enter) && ImGui::GetIO().WantCaptureKeyboard)
     {
-        // TODO: perform input validation based on ATM and user session state
-        std::cout << "The enter key was pressed!" << std::endl;
-        is_authenticated = true;
+        if (!is_authenticated)
+        {
+            if (!is_valid_authentication())
+                clear_buffer(account_input, IM_ARRAYSIZE(account_input));
+            else
+                is_authenticated = true;
+        }
+        else if (!is_authorised)
+        {
+            static int32_t fail_counter = 0;
+
+            if (!is_valid_authorisation())
+            {
+                if (fail_counter < 3)
+                {
+                    clear_buffer(pin_input, IM_ARRAYSIZE(pin_input));
+                    ++fail_counter;
+                }
+                else
+                {
+                    std::cerr << "Too many incorrect pin attempts: account locked" << std::endl;
+                    // launch error dialog
+                }
+                return;
+            }
+            else 
+                is_authorised = true;
+        }
+        else
+        {
+            if (!is_valid_core())
+            {
+                // ...
+            }
+            else 
+                std::cout << "Is authenticated and authorised" << std::endl;
+        }
     }
 }
 
