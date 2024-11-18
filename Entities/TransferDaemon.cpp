@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TRANSFER_DAEMON_MOCKS_H
-#define TRANSFER_DAEMON_MOCKS_H
+#ifndef TRANSFER_DAEMON_H
+#define TRANSFER_DAEMON_H
 
 #include <boost/asio.hpp>
 #include <boost/system/error_code.hpp>
@@ -8,22 +8,24 @@
 #include <iostream>
 #include <thread>
 #include "../DTO/AccountDTO.h"
+#include "../services/TransferService.h"
+#include "../utils/time_utils.h"
 
 class TransferDaemon {
 public:
-    TransferDaemon(boost::asio::io_context& io, AccountDTO* fromAcc, AccountDTO* toAcc,
+    TransferDaemon(boost::asio::io_context& io, uint64_t fromAccountId, uint64_t toAccountId,
         std::chrono::seconds freq, double amt, std::function<bool()> cond)
-        : from(fromAcc), to(toAcc), timer(io, freq), frequency(freq), amount(amt), condition(cond) {
+        : fromAccountId(fromAccountId), toAccountId(toAccountId), timer(io, freq),
+        frequency(freq), amount(amt), condition(cond) {
         scheduleTransfer();
     }
 
-
 private:
-    AccountDTO* from;
-    AccountDTO* to;
+    uint64_t fromAccountId;
+    uint64_t toAccountId;
     boost::asio::steady_timer timer;
     std::chrono::seconds frequency;
-    const double amount;
+    double amount;
     std::function<bool()> condition;
 
     void scheduleTransfer() {
@@ -41,12 +43,20 @@ private:
         );
     }
 
-    void checkAndTransfer() const {
+    void checkAndTransfer() {
         if (condition()) {
-            std::cout << "Transfer daemon: works" << std::endl;
-            // TODO: define how to use Transaction
+            try {
+                TransferDTO transfer(fromAccountId, toAccountId, amount, DateTime::getCurrent());
+                TransferService::create(transfer);
+                std::cout << "TransferDaemon: Transferred " << amount
+                    << " from Account ID " << fromAccountId
+                    << " to Account ID " << toAccountId << std::endl;
+            }
+            catch (const std::exception& e) {
+                std::cerr << "TransferDaemon Error: " << e.what() << std::endl;
+            }
         }
     }
 };
 
-#endif // !TRANSFER_DAEMON_MOCKS_H
+#endif // TRANSFER_DAEMON_H
