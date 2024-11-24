@@ -1,0 +1,9 @@
+[requires]
+libpqxx/7.7.5
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[options]
+libpqxx/*s:shared=True
